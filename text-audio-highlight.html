@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Audio Text Highlight Sample</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #ffffff;
+  }
+
+  .text-container {
+    font-size: 24px;
+    line-height: 1.6;
+  }
+
+  .word {
+    padding: 2px 4px;
+  }
+
+  .highlight {
+    background-color: yellow;
+  }
+
+  button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="text-container" id="text">
+  <span class="word">This</span>
+  <span class="word">is</span>
+  <span class="word">text</span>
+  <span class="word">highlighting</span>
+  <span class="word">sample</span>
+</div>
+
+<audio id="audio">
+  <!-- Replace with your own audio file URL -->
+  <source src="sample-audio.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
+
+<br />
+<button onclick="playAudio()">Play</button>
+
+<script>
+  const audio = document.getElementById("audio");
+  const words = document.querySelectorAll(".word");
+
+  // Timing (in seconds) for each word
+  // Adjust these values to match your audio narration
+  const timings = [0.0, 0.5, 1.0, 1.5, 2.2];
+
+  function clearHighlight() {
+    words.forEach(word => word.classList.remove("highlight"));
+  }
+
+  function playAudio() {
+    clearHighlight();
+    audio.currentTime = 0;
+    audio.play();
+  }
+
+  audio.addEventListener("timeupdate", () => {
+    const currentTime = audio.currentTime;
+
+    for (let i = 0; i < timings.length; i++) {
+      if (
+        currentTime >= timings[i] &&
+        (i === timings.length - 1 || currentTime < timings[i + 1])
+      ) {
+        clearHighlight();
+        words[i].classList.add("highlight");
+        break;
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
